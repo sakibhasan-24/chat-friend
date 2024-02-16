@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import useLogIn from "../../hooks/useLogIn";
 
 export default function Login() {
+  const { logIn, loading } = useLogIn();
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  // console.log(userName, password);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    await logIn(userName, password);
+  };
   return (
     <div className="max-w-3xl mx-auto flex flex-col items-center justify-center">
       <h1 className="text-6xl  text-slate-100 font-bold">
@@ -11,7 +21,7 @@ export default function Login() {
         <h1 className="text-xl sm:text-4xl text-slate-900 text-center font-bold">
           Log In
         </h1>
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="flex flex-col mt-4">
             <label
               className="text-sm sm:text-base text-slate-900 font-bold mb-2"
@@ -23,6 +33,7 @@ export default function Login() {
               className="p-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-slate-500"
               type="text"
               id="userName"
+              onChange={(e) => setUserName(e.target.value)}
             />
           </div>
           <div className="flex flex-col mt-4">
@@ -36,6 +47,7 @@ export default function Login() {
               className="p-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-slate-500"
               type="password"
               id="password"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 

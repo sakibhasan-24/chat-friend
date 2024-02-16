@@ -24,6 +24,8 @@ export default function SignUp() {
     e.preventDefault();
     // save in db
     await signUp(formData);
+    // save in localstorage
+    localStorage.setItem("user-information", JSON.stringify(formData));
   };
   console.log(formData);
   return (
