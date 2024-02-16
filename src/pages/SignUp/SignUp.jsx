@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import useSignUp from "../../hooks/useSignUp";
 
 export default function SignUp() {
+  const { isPending, signUp } = useSignUp();
+  const [formData, setFormData] = useState({
+    fullName: "",
+    userName: "",
+    password: "",
+    confirmPassword: "",
+    gender: "",
+  });
+
+  const handleGenderSelect = (e) => {
+    const { name, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      gender: checked ? name : "",
+    }));
+  };
+  const handleFormData = async (e) => {
+    // e.prventDefault();
+    e.preventDefault();
+    // save in db
+    await signUp(formData);
+  };
+  console.log(formData);
   return (
     <div className="max-w-3xl mx-auto flex flex-col items-center justify-center">
       <h1 className="text-6xl  text-slate-100 font-bold">
@@ -10,7 +35,7 @@ export default function SignUp() {
         <h1 className="text-xl sm:text-4xl text-slate-900 text-center font-bold">
           Sign Up
         </h1>
-        <form>
+        <form onSubmit={handleFormData}>
           <div className="flex flex-col mt-8">
             <label
               className="text-sm sm:text-base text-slate-900 font-bold mb-2"
@@ -21,7 +46,12 @@ export default function SignUp() {
             <input
               className="p-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-slate-500"
               type="text"
-              id="name"
+              id="fullName"
+              name="fullName"
+              value={formData.fullName}
+              onChange={(e) =>
+                setFormData({ ...formData, fullName: e.target.value })
+              }
             />
           </div>
           <div className="flex flex-col mt-8">
@@ -35,6 +65,11 @@ export default function SignUp() {
               className="p-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-slate-500"
               type="text"
               id="userName"
+              name="userName"
+              value={formData.userName}
+              onChange={(e) =>
+                setFormData({ ...formData, userName: e.target.value })
+              }
             />
           </div>
           <div className="flex flex-col mt-8">
@@ -48,6 +83,11 @@ export default function SignUp() {
               className="p-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-slate-500"
               type="password"
               id="password"
+              name="password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
           </div>
           <div className="flex flex-col mt-8">
@@ -61,6 +101,14 @@ export default function SignUp() {
               className="p-2 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-slate-500"
               type="password"
               id="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  confirmPassword: e.target.value,
+                })
+              }
             />
           </div>
           <div className="flex flex-col mt-8">
@@ -68,11 +116,23 @@ export default function SignUp() {
             <div className="flex  items-center">
               <label className="label gap-2 cursor-pointer my-2">
                 <span className="mx-2">Male</span>
-                <input type="checkbox" name="male" id="male" />
+                <input
+                  type="checkbox"
+                  name="male"
+                  id="male"
+                  checked={formData.gender === "male"}
+                  onChange={handleGenderSelect}
+                />
               </label>
               <label className="label gap-2 cursor-pointer my-2">
-                <span className="mx-2">FeMale</span>
-                <input type="checkbox" name="feMale" id="feMale" />
+                <span className="mx-2">Female</span>
+                <input
+                  type="checkbox"
+                  name="female"
+                  id="female"
+                  checked={formData.gender === "female"}
+                  onChange={handleGenderSelect}
+                />
               </label>
             </div>
           </div>
@@ -83,7 +143,7 @@ export default function SignUp() {
           />
         </form>
         <p>
-          Already have an account? <a href="#">Login</a>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
